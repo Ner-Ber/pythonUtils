@@ -1,0 +1,16 @@
+setup.py
+src/__init__.py
+src.egg-info/PKG-INFO
+src.egg-info/SOURCES.txt
+src.egg-info/dependency_links.txt
+src.egg-info/top_level.txt
+src/MyJupyter/MyJupyter.py
+src/MyJupyter/__init__.py
+src/MyJupyter/toHTML.py
+src/MyPlot/Bokeh.py
+src/MyPlot/__init__.py
+src/MyPlot/general4init.py
+src/MySignal/MySignal.py
+src/MySignal/__init__.py
+src/MySignal/nanConvolver.py
+src/MySignal/signalGaussianPyramid.py
