@@ -3,8 +3,8 @@ from numpy.lib import arraypad
 from scipy import signal, optimize
 import sys
 from copy import deepcopy
-sys.path.append('G:\\My Drive\\pythonCode')
-import MyGeneral
+# sys.path.append('G:\\My Drive\\pythonCode')
+from  .. import MyGeneral
 
 
 
@@ -161,6 +161,7 @@ def normalizeToRange(signal_array:np.ndarray, range=[-1,1]):
 
 
 if __name__=="__main__":
-    locals().update(MyGeneral.cachePickleReadFrom())
-    display_array = np.array([normalizeToRange(r.data) for r in ross_stream_integ_4_display])
+    # locals().update(MyGeneral.cachePickleReadFrom())
+    R = np.random.rand(4,20)*120-4
+    display_array = np.array([normalizeToRange(r.data) for r in R])
     pass

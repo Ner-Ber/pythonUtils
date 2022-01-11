@@ -2,8 +2,8 @@ import numpy as np
 from scipy import signal
 from pathlib import Path
 import sys
-sys.path.append(Path('G:\My Drive\pythonCode\MySignal'))
-from MySignal import *
+# sys.path.append(Path('G:\My Drive\pythonCode\MySignal'))
+from .MySignal import *
 
 class signalGaussianPyramid:
     def __init__(self, signal=None, signalTime=None, numPyrLevels=4, initGaussLength=51, gaussWidth=0.4, generatePyr=True) -> None:
@@ -83,8 +83,8 @@ class signalGaussianPyramid:
 if __name__=='__main__':
     import sys
     from pathlib import Path
-    sys.path.append('G://My Drive//pythonCode')
-    import MyGeneral
+    # sys.path.append('G://My Drive//pythonCode')
+    from .. import MyGeneral
     locals().update(MyGeneral.cachePickleReadFrom())
 
     numPyrLevels=3

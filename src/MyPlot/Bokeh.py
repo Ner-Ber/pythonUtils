@@ -6,7 +6,8 @@ from bokeh.models import  HoverTool, ColumnDataSource, MultiLine
 from matplotlib import colors
 from pathlib import Path
 import sys
-sys.path.append(Path('G:\My Drive\pythonCode\MyPlot'))
+import itertools
+# sys.path.append(Path('G:\My Drive\pythonCode\MyPlot'))
 # from general4init import *
 from .general4init import *
 
@@ -43,7 +44,6 @@ def coors4QuiverPlot(x,y,u,v, scale=None):
     #--- set auto scaling factor
     if scale is None:
         minDist = np.inf
-        import itertools
         for i in itertools.combinations(range(len(x)),2):
             dist = np.sqrt((x[i[0]]-x[i[1]])**2 + (y[i[0]]-y[i[1]])**2)
             if dist<minDist: minDist = deepcopy(dist)
