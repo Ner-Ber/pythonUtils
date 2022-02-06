@@ -141,7 +141,8 @@ def newest_file_in_dir(path, spec='*'):
 
 
 # pickeCacheFile = 'C:/Users/NB/AppData/Local/Temp/python_pickle_cahce.pkl'
-pickeCacheFile = 'C:/Users/user/AppData/Local/Temp/python_pickle_cahce.pkl'
+# pickeCacheFile = 'C:/Users/user/AppData/Local/Temp/python_pickle_cahce.pkl'
+pickeCacheFile = '/tmp/python_pickle_cahce.pkl'
 
 def cachePickleDumpTo(**Dict):
     outfile = open(pickeCacheFile,'wb')

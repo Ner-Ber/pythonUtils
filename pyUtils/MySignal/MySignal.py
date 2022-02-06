@@ -156,10 +156,38 @@ def normalizeToRange(signal_array:np.ndarray, range=[-1,1]):
         return signal_array
 
     
-    pass
+def finiteDiffDerivative(y:np.array, x=None):
+
+    def expandDim(A):
+        single_dim = False
+        if A.ndim==1:
+            A = (A+0)[None,:]
+            single_dim = True
+        return A, single_dim
+    
+    
+    y, single_dim = expandDim(y)
+    sig_len = y.shape[1]
+    if x is None:
+        x = np.arange(sig_len)[None,:]
+    else:
+        x, _ = expandDim(x)
+    
+    avgKernel = np.array([[0.5, 0.5]])
+    x_return = signal.convolve2d(x, avgKernel, mode='valid')
+    deriv = np.diff(y, axis=1)/np.diff(x, axis=1)
+
+    if single_dim:
+        return deriv.ravel(), x_return.ravel()
+    else:
+        return deriv, x_return
 
 
+def filterWithButter(dataMat, filterWindow, samp_freq, filtOrder=2, btype='bandpass'):
+    b, a = signal.butter(filtOrder, np.array(filterWindow), btype=btype, fs=samp_freq)
+    return signal.filtfilt(b, a, dataMat)
 
+    
 if __name__=="__main__":
     # locals().update(MyGeneral.cachePickleReadFrom())
     R = np.random.rand(4,20)*120-4
