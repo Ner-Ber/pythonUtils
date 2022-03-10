@@ -16,6 +16,7 @@ from obspy.core.event import Catalog
 import sys
 # sys.path.append('G:\\My Drive\\pythonCode')
 from pyUtils import MyGeneral
+from  obspy.core.event.catalog import read_events
 
 
 def japanHypocenterRecordFormat():
@@ -251,6 +252,7 @@ def saveReadmeFileFromKwargs(readmePath, kwargs, clientName):
     kwargs['timeOfCreation'] = Tstr
     kwargs['starttime'] = kwargs['starttime'].ctime()
     kwargs['endtime'] = kwargs['endtime'].ctime()
+    kwargs['api'] = 'obspy'
     with open(readmePath, 'w') as readmeHandle:
         json.dump(kwargs, readmeHandle, indent=2)
 
@@ -271,12 +273,27 @@ def createFolderForSavingCat(containingFolderPath, clientName):
     return newFolderPath
 
 
-def readCatTxt(containingFolder):
-    catPath = Path(containingFolder / 'cat.txt')
+def readCatAndMeta(containingFolder):
+
+    #--- load meta file with creation details
     detailsPath = Path(containingFolder / 'catDetails.txt')
     with open(detailsPath,) as detHand:
         details = json.load(detHand)
 
+    #--- load cat file
+    cat_path = MyGeneral.files_of_certain_pattern(containingFolder, pattern='cat.*')[0]
+    txtCat = Path(cat_path).suffix=='.txt'
+    if txtCat:  # if it was created with saveAsTxt=True @ createAndSaveCat
+        catDf = pd.read_csv(cat_path, sep=' ', header=0, dtype=txtCatColumnTypes(), na_values='None')
+        catData = catDf.values
+        columnNames = catDf.columns
+        return (catData, columnNames), details
+    else: # if saveAsTxt=False
+        catRead = read_events(cat_path)
+        return catRead, details
+
+def txtCatColumnTypes():
+    # Cat types for if it was created with saveAsTxt=True @ createAndSaveCat
     columnTypes = {
         'year': np.int, 
         'month': np.int, 
@@ -294,51 +311,11 @@ def readCatTxt(containingFolder):
         'mag_error': np.float64, 
         'magnitude_type': str
     }
-    catDf = pd.read_csv(catPath, sep=' ', header=0, dtype=columnTypes, na_values='None')
-    catData = catDf.values
-    columnNames = catDf.columns
-
-    return catData, columnNames, details
-
-
-
-        
-
-    pass
+    return columnTypes
 
 if __name__=="__main__":
-    starttime = kwargsDefaults({})['starttime']
-
-
+    path = '/mnt/g/My Drive/Projects/MagMl/data/EQ_catalogs/NCEDC_1'
+    files_list = MyGeneral.files_of_certain_pattern(path, pattern='cat.*')
+    F = Path(files_list[0]).suffix=='.txt'
+    F.suffix
     pass
-
-
-
-
-    pass
-    Ndays = 100
-    startTime=obspy.UTCDateTime(2020,1,1)
-    endTime=startTime + 60*60*24*Ndays
-    filePath = PurePath('/mnt/g/My Drive/Projects/MagMl/data/EQ_catalogs')
-    createAndSaveCat(filePath, starttime=startTime, endtime=endTime)
-
-
-    # cat = getEventsViaObspy(**{"starttime":startTime, "endtime":endTime})
-    cat = getEventsViaObspy_catchException(**{"starttime":startTime, "endtime":endTime})
-
-    # Df = obspyCat2Df(cat)
-    # Df.hist(column='mag', log=True, bins=15)
-    
-    cat.write(filePath, format="QUAKEML")  
-
-    #-- save cat and metadata
-
-
-    
-
-    # obspyCat2File(cat, filePath)
-
-    # folderPath = Path('H:\\My Drive\\EQ_catalogs\\NCEDC_36')
-    # catData, columnNames, details = readCatTxt(folderPath)
-    # print('')
-    # pass
