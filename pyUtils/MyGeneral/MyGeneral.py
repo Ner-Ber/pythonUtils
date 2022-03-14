@@ -158,3 +158,8 @@ def cachePickleReadFrom():
     new_load = pickle.load(infile)
     infile.close()
     return new_load
+
+
+class HashableDict(dict):
+    def __hash__(self):
+        return hash(frozenset(self.items()))
