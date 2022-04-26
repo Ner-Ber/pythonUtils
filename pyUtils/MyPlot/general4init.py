@@ -27,6 +27,22 @@ def createColormap(vmin_vmax=None, cmap=cm.rainbow):
 
 
 def number2colors(numbers, vmin_vmax=None, cmap=cm.rainbow):
+    """take a vector of numbers and translate them into and array where each row is a 4-digit rgba color
+
+    Args:
+        numbers (_type_): input array of num
+        vmin_vmax (tuple of 2 nums, optional): range of numbers to use. Defaults to None.
+        cmap (matplotlib colormap or colormap name): the colormap to create from. Defaults to cm.rainbow.
+
+    Returns:
+        _type_: _description_
+    """
+    if type(cmap)==str:
+        cmap = getattr(cm, cmap)
+    if vmin_vmax is not None:
+        vmin = np.minimum(vmin_vmax)
+        vmax = np.maximum(vmin_vmax)
+        numbers = np.maximum(np.minimum(numbers, vmax), vmin)
     m = createColormap(vmin_vmax=numbers, cmap=cmap)
     return m.to_rgba(numbers)
 

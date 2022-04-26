@@ -7,6 +7,7 @@ from matplotlib import colors
 from pathlib import Path
 import sys
 import itertools
+import tqdm
 # sys.path.append(Path('G:\My Drive\pythonCode\MyPlot'))
 # from general4init import *
 from .general4init import *
@@ -23,15 +24,23 @@ def plotMultipLine(x:np.ndarray, ys:np.ndarray, cmName='myn', showByDefault=Fals
         [type]: [description]
     """
     N = len(ys)
+    # import ipdb; ipdb.set_trace()
+    #-- is x 1D or 2D?
+    assert x.ndim<=2
+    if ((1 in x.shape) | (len(x.shape)==1)):
+        xs = np.repeat((x.squeeze())[None,:], N, axis=0)
+    else:
+        xs = x
+    
     p = bk.figure(width=1000, height=600);
     colormap = varyColor(N, usrColormap=cmName)
     # colormap = general4init.varyColor(N, usrColormap=cmName)
 
-    for i in range(N):
+    for i in tqdm.tqdm(range(N)):
         C = colors.to_hex(list(colormap[i]));
-        l = p.line(x, ys[i], legend_label="station {}".format(i), line_color=C);
+        l = p.line(xs[i], ys[i], legend_label="station {}".format(i), line_color=C);
         l.visible=showByDefault
-        s = p.square(x, ys[i], legend_label="station {}".format(i), fill_color=None, line_color=C);
+        s = p.square(xs[i], ys[i], legend_label="station {}".format(i), fill_color=None, line_color=C);
         s.visible=showByDefault
 
     p.legend.click_policy="hide"
